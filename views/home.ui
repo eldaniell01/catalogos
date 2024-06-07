@@ -22,7 +22,7 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(22, 71, 115);</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btnCrepuestos">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -45,7 +45,7 @@ background-color: rgb(32, 32, 34);</string>
     <string>CONSULTAR REPUESTO</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="btnRepuestos">
    <property name="geometry">
     <rect>
      <x>450</x>
