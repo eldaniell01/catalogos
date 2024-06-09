@@ -53,7 +53,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="tabBarAutoHide">
     <bool>false</bool>
@@ -87,30 +87,6 @@ border: 1px solid;</string>
      </property>
      <property name="placeholderText">
       <string>CODIGO</string>
-     </property>
-    </widget>
-    <widget class="QPlainTextEdit" name="txtDescripcion">
-     <property name="geometry">
-      <rect>
-       <x>380</x>
-       <y>30</y>
-       <width>361</width>
-       <height>111</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>FiraCode Nerd Font</family>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-border-radius: 8px;
-border: 1px solid;</string>
-     </property>
-     <property name="placeholderText">
-      <string>DESCRIPCION</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnImagen">
@@ -204,7 +180,8 @@ background-color: rgb(32, 32, 34);</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
+      <string notr="true">background-color: rgb(255, 255, 255);
+</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnInsert">
@@ -251,6 +228,30 @@ background-color: rgb(32, 32, 34);</string>
      </property>
      <property name="text">
       <string>SALIR</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="txtDescription">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>30</y>
+       <width>351</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>FiraCode Nerd Font</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;
+border-radius: 6px;</string>
+     </property>
+     <property name="placeholderText">
+      <string>DESCRIPCION</string>
      </property>
     </widget>
    </widget>
