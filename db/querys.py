@@ -36,4 +36,5 @@ class Query:
                 """
         values = (codigo, descripcion, imagen, categoria, motos)
         self.db.execute_query(query, values)
-        self.db.close_connection()
+        
+        

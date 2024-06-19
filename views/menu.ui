@@ -262,7 +262,7 @@ border-radius: 6px;</string>
     <widget class="QPushButton" name="btnIlistado">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>210</x>
        <y>120</y>
        <width>301</width>
        <height>41</height>
@@ -352,6 +352,29 @@ background-color: rgb(32, 32, 34);</string>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 255);
 </string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnInsertlist">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>470</y>
+       <width>341</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>FiraCode Nerd Font</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 32, 34);</string>
+     </property>
+     <property name="text">
+      <string>AGREGAR LISTADO DE REPUESTOS</string>
      </property>
     </widget>
    </widget>

@@ -3,18 +3,20 @@ from openpyxl import load_workbook
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidget, QHeaderView, QTableWidgetItem
 from PyQt6.QtGui import QFont
-
+from db.conexion import ConexionMysql
 from db.querys import Query
 
 class Menu(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.db = ConexionMysql()
         self.menu = uic.loadUi('views/menu.ui')
         self.menu.show()
         self.menu.btnImoto.clicked.connect(self.insertMoto)
         self.menu.btnInsert.clicked.connect(self.insertRepuesto)
         self.menu.btnImagen.clicked.connect(self.openImagen)
         self.menu.btnIlistado.clicked.connect(self.openExcel)
+        self.menu.btnInsertlist.clicked.connect(self.insertList)
         self.category = []
         self.moto = []
         self.img = []
@@ -48,7 +50,7 @@ class Menu(QMainWindow):
         self.menu.tMoto.setStyleSheet(header_style)
     
     def showTlistado(self):
-        columns = ['MOTO', 'DESCRIPCION', 'CATEGORIA']
+        columns = ['MOTO', 'DESCRIPCION', 'CATEGORIA', 'MOTO']
         self.menu.tRlistado.setFont(QFont("FiraCode Nerd Font", 12))
         self.menu.tRlistado.setColumnCount(len(columns))
         for column, name in enumerate(columns):
@@ -100,9 +102,9 @@ class Menu(QMainWindow):
         query = Query()
         options = set(self.category)
         result = query.selectCategory()
-        for data, datos in enumerate(result):
-            options.add(str(datos[1]))
-        self.menu.cbClistado.addItems(list(options))
+        for id, data in result:
+            self.menu.cbClistado.addItem(str(data))
+        
     
     def showMoto(self):
         query = Query()
@@ -156,15 +158,16 @@ class Menu(QMainWindow):
         query = Query()
         idcategory = self.menu.cbCategoria.currentIndex()+1
         idmoto = self.menu.cbMoto.currentIndex()+1
-        for ruta_imagen in self.img:
-                if os.path.exists(ruta_imagen):
-                    with open(ruta_imagen, 'rb') as file:
-                        print(ruta_imagen)
-                        imagen_binaria = file.read()
-                        query.insertRepuesto(self.menu.txtCodigo.text(), self.menu.txtDescription.toPlainText(), imagen_binaria, idcategory, idmoto)
-                else: 
-                    print('error')
-        
+        if self.img:
+            for ruta_imagen in self.img:  
+                with open(ruta_imagen, 'rb') as file:
+                    print(ruta_imagen)
+                    imagen_binaria = file.read()
+                    query.insertRepuesto(self.menu.txtCodigo.text(), self.menu.txtDescription.toPlainText(), imagen_binaria, idcategory, idmoto)
+        else:
+            query.insertRepuesto(self.menu.txtCodigo.text(), self.menu.txtDescription.toPlainText(), None, idcategory, idmoto)
+            
+        self.db.close_connection()
         row = self.menu.tRepuestos.rowCount()
         self.menu.tRepuestos.insertRow(row)
         self.menu.tRepuestos.setItem(row, 0, QTableWidgetItem(self.menu.txtCodigo.text()))
@@ -181,9 +184,22 @@ class Menu(QMainWindow):
             print(row[1])
             self.menu.tRlistado.setItem(row_index, 0, QTableWidgetItem(str(row[0])))
             self.menu.tRlistado.setItem(row_index, 1, QTableWidgetItem(str(row[1])))
-            self.menu.tRlistado.setItem(row_index, 2, QTableWidgetItem(self.menu.cbClistado.currentText()))
+            self.menu.tRlistado.setItem(row_index, 2, QTableWidgetItem(str(self.menu.cbClistado.currentIndex()+1)))
+            self.menu.tRlistado.setItem(row_index, 3, QTableWidgetItem(str(self.menu.cbMlistado.currentIndex()+1)))
             
-    
+    def insertList(self):
+        query = Query()
+        try: 
+            for row in range(self.menu.tRlistado.rowCount()):
+                cod = self.menu.tRlistado.item(row, 0)
+                description = self.menu.tRlistado.item(row, 1)
+                category = self.menu.tRlistado.item(row, 2)
+                moto = self.menu.tRlistado.item(row, 3)
+                query.insertRepuesto(cod.text(),description.text(), None, int(category.text()), int(moto.text()))
+        except Exception as e:
+            print(e)
+        finally:
+            self.db.close_connection()
     
     def openImagen(self):
         folder = QFileDialog()
