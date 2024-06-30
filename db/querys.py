@@ -37,4 +37,11 @@ class Query:
         values = (codigo, descripcion, imagen, categoria, motos)
         self.db.execute_query(query, values)
         
-        
+    def selectRepuestos(self, codigo):
+        query = """
+                    SELECT codigo, GROUP_CONCAT(descripcion SEPARATOR ", ") as descrip FROM repuestos WHERE codigo = %s GROUP BY codigo
+                """
+        values = (codigo,)
+        result = self.db.execute_query(query, values)
+        self.db.close_connection()
+        return result
