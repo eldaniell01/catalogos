@@ -59,4 +59,7 @@ class Catalogos(QMainWindow):
         print(result)
         
     def searchRepuestoMoto(self):
-        print(self.catalogo.cbMotoL.currentText())
+        query = Query()
+        nombre = str(self.catalogo.cbMotoL.currentText()).split()
+
+        print(nombre[0])

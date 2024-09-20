@@ -49,3 +49,15 @@ class Query:
         result = self.db.execute_query(query, values)
         self.db.close_connection()
         return result
+    
+    def selectRepuestosMotos(self, nombre):
+        query = """
+                    SELECT codigo, descripcion, categorias_idcategorias, m.nombre FROM repuestos r  
+                    INNER JOIN motos m on r.motos_idmotos = m.idmotos
+                    WHERE m.nombre = %s
+                    GROUP BY codigo
+                """
+        values = (nombre,)
+        result = self.db.execute_query(query, values)
+        self.db.close_connection()
+        return result
