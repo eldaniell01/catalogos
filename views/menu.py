@@ -146,13 +146,18 @@ class Menu(QMainWindow):
             query.insertMoto(self.nombre, self.descripcion, self.modelo, self.marca)
             
         row = self.menu.tMoto.rowCount()
-        self.menu.tRepuestos.insertRow(row)
-        self.menu.tRepuestos.setItem(row, 0, QTableWidgetItem(self.nombre))
-        self.menu.tRepuestos.setItem(row, 0, QTableWidgetItem(self.descripcion))
-        self.menu.tRepuestos.setItem(row, 0, QTableWidgetItem(str(self.modelo)))
-        self.menu.tRepuestos.setItem(row, 0, QTableWidgetItem(self.marca))
-        self.menu.cbMoto.clear()
+        self.menu.tMoto.insertRow(row)
+        self.menu.tMoto.setItem(row, 0, QTableWidgetItem(self.nombre))
+        self.menu.tMoto.setItem(row, 1, QTableWidgetItem(self.descripcion))
+        self.menu.tMoto.setItem(row, 2, QTableWidgetItem(str(self.modelo)))
+        self.menu.tMoto.setItem(row, 3, QTableWidgetItem(self.marca))
+        self.menu.cbMlistado.clear()
         self.showMoto()
+        self.menu.cbMoto.clear()
+        self.menu.txtName.setText("")
+        self.menu.cbYear.clear()
+        self.menu.txtMarca.setText("")
+        self.menu.txtDmoto.setText("")
             
     def insertRepuesto(self):
         query = Query()
@@ -180,9 +185,10 @@ class Menu(QMainWindow):
         sheet = workbook.active
         for row in sheet.iter_rows(values_only= True):
             row_index = self.menu.tRlistado.rowCount()
+            cod = row[0].replace('-','')
             self.menu.tRlistado.insertRow(row_index)
             print(row[1])
-            self.menu.tRlistado.setItem(row_index, 0, QTableWidgetItem(str(row[0])))
+            self.menu.tRlistado.setItem(row_index, 0, QTableWidgetItem(str(cod)))
             self.menu.tRlistado.setItem(row_index, 1, QTableWidgetItem(str(row[1])))
             self.menu.tRlistado.setItem(row_index, 2, QTableWidgetItem(str(self.menu.cbClistado.currentIndex()+1)))
             self.menu.tRlistado.setItem(row_index, 3, QTableWidgetItem(str(self.menu.cbMlistado.currentIndex()+1)))
@@ -196,6 +202,7 @@ class Menu(QMainWindow):
                 category = self.menu.tRlistado.item(row, 2)
                 moto = self.menu.tRlistado.item(row, 3)
                 query.insertRepuesto(cod.text(),description.text(), None, int(category.text()), int(moto.text()))
+                self.menu.cbMlistado.clear()
         except Exception as e:
             print(e)
         finally:

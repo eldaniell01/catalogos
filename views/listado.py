@@ -9,6 +9,7 @@ class Catalogos(QMainWindow):
         self.catalogo = uic.loadUi('views/catalogo.ui')
         self.catalogo.show()
         self.catalogo.btnSearch.clicked.connect(self.searchRepuestos)
+        self.catalogo.cbMotoL.currentIndexChanged.connect(self.searchRepuestoMoto)
         self.showClistado()
         self.showMoto()
         self.showTableRepuestos()
@@ -27,7 +28,7 @@ class Catalogos(QMainWindow):
             self.catalogo.cbMotoL.addItem(str(data))
             
     def showTableRepuestos(self):
-        columns = ['CÓDIGO', 'DESCRIPCION', 'MOTO', 'OPCION']
+        columns = ['CÓDIGO', 'DESCRIPCION']
         self.catalogo.tRepuestosL.setFont(QFont("FiraCode Nerd Font", 12))
         self.catalogo.tRepuestosL.setColumnCount(len(columns))
         for column, name in enumerate(columns):
@@ -49,5 +50,13 @@ class Catalogos(QMainWindow):
     def searchRepuestos(self):
         query = Query()
         self.codigo = self.catalogo.txtCodeName.text()
-        result = query.selectRepuestos(self.codigo)
+        cod = str(self.codigo)
+        result = query.selectRepuestos(cod.upper())
+        row_index = self.catalogo.tRepuestosL.rowCount()
+        self.catalogo.tRepuestosL.insertRow(row_index)
+        self.catalogo.tRepuestosL.setItem(row_index, 0, QTableWidgetItem(str(result[0][0])))
+        self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(result[0][1])))
         print(result)
+        
+    def searchRepuestoMoto(self):
+        print(self.catalogo.cbMotoL.currentText())

@@ -6,24 +6,32 @@ class ConexionMysql:
         self.host = 'localhost'
         self.user = 'root'
         self.password = '123'
-        self.data_base = 'catalogos'
+        self.data_base = 'mydb'
         self.conexion = None
         self.cursor = None
         
     def connection(self):
         try:
             self.conexion = mysql.connector.connect(
-                host = self.host,
-                user = self.user,
-                password = self.password,
-                database = self.data_base
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.data_base,
+                charset='utf8mb4',  # Establecer el charset
+                collation='utf8mb4_general_ci' 
             )
             self.cursor = self.conexion.cursor()
-            return f"conectado a {self.cursor}"
+            print(f"Conectado a {self.data_base}")
         except mysql.connector.Error as error:
-            return error
+            print(f"Error al conectar a la base de datos: {error}")
+            self.conexion = None  # Para asegurar que la conexión se detecte como fallida
+    
     
     def execute_query(self, query, values=None):
+        if not self.conexion or not self.cursor:
+            print("No hay conexión a la base de datos.", self.conexion, self.cursor)
+            return None
+        
         try:
             if values:
                 self.cursor.execute(query, values)
@@ -34,7 +42,8 @@ class ConexionMysql:
             self.conexion.commit()
             return result
         except mysql.connector.Error as e:
-            print(f"error: {e}")
+            print(f"Error en la consulta: {e}")
+            return None
     
     def close_connection(self):
         if self.cursor:

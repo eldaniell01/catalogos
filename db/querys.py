@@ -18,6 +18,7 @@ class Query:
                     SELECT * FROM categorias
                 """
         result = self.db.execute_query(query)
+        print("hola ", result)
         self.db.close_connection()
         return result
     
@@ -39,7 +40,10 @@ class Query:
         
     def selectRepuestos(self, codigo):
         query = """
-                    SELECT codigo, GROUP_CONCAT(descripcion SEPARATOR ", ") as descrip FROM repuestos WHERE codigo = %s GROUP BY codigo
+                    SELECT codigo, GROUP_CONCAT(m.nombre SEPARATOR ", ") as descrip FROM repuestos r  
+                    INNER JOIN motos m on r.motos_idmotos = m.idmotos
+                    WHERE codigo = %s
+                    GROUP BY codigo
                 """
         values = (codigo,)
         result = self.db.execute_query(query, values)
