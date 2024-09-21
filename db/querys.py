@@ -52,7 +52,7 @@ class Query:
     
     def selectRepuestosMotos(self, nombre):
         query = """
-                    SELECT codigo, descripcion, categorias_idcategorias, m.nombre FROM repuestos r  
+                    SELECT r.codigo, r.descripcion, r.categorias_idcategorias, m.nombre FROM repuestos r  
                     INNER JOIN motos m on r.motos_idmotos = m.idmotos
                     WHERE m.nombre = %s
                     GROUP BY codigo
@@ -60,4 +60,13 @@ class Query:
         values = (nombre,)
         result = self.db.execute_query(query, values)
         self.db.close_connection()
+        return result
+    
+    def selectMotoSearch(self):
+        query = """
+                    SELECT idmotos, nombre FROM motos ORDER BY idmotos
+                """
+        result = self.db.execute_query(query)
+        self.db.close_connection()
+        print(result)
         return result
