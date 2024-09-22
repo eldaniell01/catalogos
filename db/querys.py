@@ -52,8 +52,9 @@ class Query:
     
     def selectRepuestosMotos(self, nombre):
         query = """
-                    SELECT r.codigo, r.descripcion, r.categorias_idcategorias, m.nombre FROM repuestos r  
+                    SELECT r.codigo, r.descripcion, c.descripcion, m.nombre FROM repuestos r  
                     INNER JOIN motos m on r.motos_idmotos = m.idmotos
+                    INNER JOIN categorias c on r.categorias_idcategorias = c.idcategorias
                     WHERE m.nombre = %s
                     GROUP BY codigo
                 """

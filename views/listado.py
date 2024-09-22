@@ -8,8 +8,9 @@ class Catalogos(QMainWindow):
         super().__init__()
         self.catalogo = uic.loadUi('views/catalogo.ui')
         self.catalogo.show()
-        self.catalogo.btnSearch.clicked.connect(self.searchRepuestos)
+        self.catalogo.btnSearch.clicked.connect(self.clearTable)
         self.catalogo.cbMotoL.currentIndexChanged.connect(self.searchRepuestoMoto)
+        self.catalogo.cbCategoryL.currentIndexChanged.connect(self.searchRepuestoCategory)
         self.showClistado()
         self.showMoto()
         
@@ -96,4 +97,19 @@ class Catalogos(QMainWindow):
             self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(description)))
             self.catalogo.tRepuestosL.setItem(row_index, 2, QTableWidgetItem(str(category)))
             self.catalogo.tRepuestosL.setItem(row_index, 3, QTableWidgetItem(str(moto)))
+        self.catalogo.cbMotoL.setCurrentIndex(-1)
         print(result)
+        
+    def searchRepuestoCategory(self):
+        self.category = self.catalogo.cbCategoryL.currentText()
+        for row in range(self.catalogo.tRepuestosL.rowCount()):
+            row_text=[self.catalogo.tRepuestosL.item(row, col).text().upper() for col in range(self.catalogo.tRepuestosL.columnCount())]
+            print(row_text)
+            if any(self.category in text for text in row_text):
+                self.catalogo.tRepuestosL.setRowHidden(row, False)
+            else:
+                self.catalogo.tRepuestosL.setRowHidden(row,True)
+        self.catalogo.cbCategoryL.setCurrentIndex(-1)
+                  
+    def clearTable(self):
+        self.catalogo.tRepuestosL.setRowCount(0)
