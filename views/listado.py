@@ -113,3 +113,6 @@ class Catalogos(QMainWindow):
                   
     def clearTable(self):
         self.catalogo.tRepuestosL.setRowCount(0)
+    
+    def clearTable(self):
+        self.catalogo.tRepuestosL.setRowCount(0)
