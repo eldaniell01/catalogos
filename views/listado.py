@@ -3,14 +3,17 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTa
 from PyQt6.QtGui import QFont
 from db.querys import Query
 
+
+
 class Catalogos(QMainWindow):
     def __init__(self):
         super().__init__()
         self.catalogo = uic.loadUi('views/catalogo.ui')
         self.catalogo.show()
-        self.catalogo.btnSearch.clicked.connect(self.clearTable)
-        self.catalogo.cbMotoL.currentIndexChanged.connect(self.searchRepuestoMoto)
+        self.catalogo.btnSearch.clicked.connect(self.search)
+        self.catalogo.btnReturn.clicked.connect(self.returnExit)
         self.catalogo.cbCategoryL.currentIndexChanged.connect(self.searchRepuestoCategory)
+        self.catalogo.btnClear.clicked.connect(self.clearTable)
         self.showClistado()
         self.showMoto()
         
@@ -68,24 +71,36 @@ class Catalogos(QMainWindow):
         """
         self.catalogo.tRepuestosL.setStyleSheet(header_style)
     
+    def search(self):
+        codigo = self.catalogo.txtCodeName.text()
+        if codigo:
+            print(codigo)
+            self.searchRepuestos()
+        else:
+            self.searchRepuestoMoto()
+    
     def searchRepuestos(self):
-        self.showTableRepuestos()
-        query = Query()
-        self.codigo = self.catalogo.txtCodeName.text()
-        cod = str(self.codigo)
-        result = query.selectRepuestos(cod.upper())
-        row_index = self.catalogo.tRepuestosL.rowCount()
-        self.catalogo.tRepuestosL.insertRow(row_index)
-        self.catalogo.tRepuestosL.setItem(row_index, 0, QTableWidgetItem(str(result[0][0])))
-        self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(result[0][1])))
-        print(result)
+        try:
+            self.showTableRepuestos()
+            query = Query()
+            self.codigo = self.catalogo.txtCodeName.text()
+            cod = str(self.codigo)
+            result = query.selectRepuestos(cod.upper())
+            row_index = self.catalogo.tRepuestosL.rowCount()
+            self.catalogo.tRepuestosL.insertRow(row_index)
+            self.catalogo.tRepuesreturnExittosL.setItem(row_index, 0, QTableWidgetItem(str(result[0][0])))
+            self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(result[0][1])))
+        except Exception as e:
+            print('codigo no encontrado o no valido: ', e)
+        
         
     def searchRepuestoMoto(self):
         self.showTableMotos()
         query = Query()
         self.nombre = self.catalogo.cbMotoL.currentText()
+        self.year = self.catalogo.cbModelo.currentText()
         print(self.nombre)
-        result = query.selectRepuestosMotos(self.nombre)
+        result = query.selectRepuestosMotos(self.nombre, int(self.year))
         for row in result:
             cod = row[0]
             description = row[1]
@@ -97,7 +112,7 @@ class Catalogos(QMainWindow):
             self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(description)))
             self.catalogo.tRepuestosL.setItem(row_index, 2, QTableWidgetItem(str(category)))
             self.catalogo.tRepuestosL.setItem(row_index, 3, QTableWidgetItem(str(moto)))
-        self.catalogo.cbMotoL.setCurrentIndex(-1)
+        
         print(result)
         
     def searchRepuestoCategory(self):
@@ -109,10 +124,16 @@ class Catalogos(QMainWindow):
                 self.catalogo.tRepuestosL.setRowHidden(row, False)
             else:
                 self.catalogo.tRepuestosL.setRowHidden(row,True)
-        self.catalogo.cbCategoryL.setCurrentIndex(-1)
+        
                   
     def clearTable(self):
         self.catalogo.tRepuestosL.setRowCount(0)
-    
-    def clearTable(self):
-        self.catalogo.tRepuestosL.setRowCount(0)
+        self.catalogo.cbCategoryL.setCurrentIndex(-1)
+        self.catalogo.cbModelo.setCurrentIndex(-1)
+        self.catalogo.cbMotoL.setCurrentIndex(-1)
+        self.catalogo.txtCodeName.setText('')
+
+    def returnExit(self):
+        from .home import Home
+        self.home = Home()
+        self.catalogo.close()
