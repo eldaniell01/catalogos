@@ -17,6 +17,7 @@ class Menu(QMainWindow):
         self.menu.btnImagen.clicked.connect(self.openImagen)
         self.menu.btnIlistado.clicked.connect(self.openExcel)
         self.menu.btnInsertlist.clicked.connect(self.insertList)
+        self.menu.btnClear.clicked.connect(self.clear)
         self.category = []
         self.moto = []
         self.img = []
@@ -153,9 +154,9 @@ class Menu(QMainWindow):
         self.menu.tMoto.setItem(row, 3, QTableWidgetItem(self.marca))
         self.menu.cbMlistado.clear()
         self.showMoto()
-        self.menu.cbMoto.clear()
+        self.menu.cbMoto.setCurrentIndex(-1)
         self.menu.txtName.setText("")
-        self.menu.cbYear.clear()
+        self.menu.cbYear.setCurrentIndex(-1)
         self.menu.txtMarca.setText("")
         self.menu.txtDmoto.setText("")
             
@@ -218,4 +219,12 @@ class Menu(QMainWindow):
         folder_path, __= folder.getOpenFileName(None, 'ABRIR ARCHIVO', '', 'xlsx (*.xlsx)')
         print(folder_path)
         self.loadList(folder_path)
+        
+    def clear(self):
+        self.menu.tMoto.setRowCount(0)
+        self.menu.cbMoto.setCurrentIndex(-1)
+        self.menu.txtName.setText("")
+        self.menu.cbYear.setCurrentIndex(-1)
+        self.menu.txtMarca.setText("")
+        self.menu.txtDmoto.setText("")
         

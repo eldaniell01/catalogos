@@ -53,7 +53,7 @@
     <enum>QTabWidget::Rounded</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="tabBarAutoHide">
     <bool>false</bool>
@@ -385,7 +385,7 @@ background-color: rgb(32, 32, 34);</string>
     <widget class="QLineEdit" name="txtName">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>10</y>
        <width>281</width>
        <height>41</height>
@@ -412,7 +412,7 @@ border: 1px solid;</string>
     <widget class="QComboBox" name="cbYear">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>100</y>
        <width>281</width>
        <height>41</height>
@@ -523,7 +523,7 @@ background-color: rgb(32, 32, 34);</string>
     <widget class="QPushButton" name="btnImoto">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>430</x>
        <y>160</y>
        <width>301</width>
        <height>41</height>
@@ -634,6 +634,29 @@ border: 1px solid;</string>
      </property>
      <property name="placeholderText">
       <string>MARCA</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnClear">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>301</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>FiraCode Nerd Font</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 32, 34);</string>
+     </property>
+     <property name="text">
+      <string>LIMPIAR CAMPOS</string>
      </property>
     </widget>
    </widget>

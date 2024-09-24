@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidget, QHeaderView, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QMessageBox, QTableWidget, QHeaderView, QTableWidgetItem
 from PyQt6.QtGui import QFont
 from db.querys import Query
 
@@ -14,6 +14,7 @@ class Catalogos(QMainWindow):
         self.catalogo.btnReturn.clicked.connect(self.returnExit)
         self.catalogo.cbCategoryL.currentIndexChanged.connect(self.searchRepuestoCategory)
         self.catalogo.btnClear.clicked.connect(self.clearTable)
+        self.catalogo.tRepuestosL.itemClicked.connect(self.registroClick)
         self.showClistado()
         self.showMoto()
         
@@ -32,12 +33,13 @@ class Catalogos(QMainWindow):
             self.catalogo.cbMotoL.addItem(str(data))
             
     def showTableRepuestos(self):
-        columns = ['CÓDIGO', 'DESCRIPCION']
+        columns = ['CÓDIGO', 'REPUESTO', 'DESCRIPCION']
         self.catalogo.tRepuestosL.setFont(QFont("FiraCode Nerd Font", 12))
         self.catalogo.tRepuestosL.setColumnCount(len(columns))
         for column, name in enumerate(columns):
             self.catalogo.tRepuestosL.setHorizontalHeaderItem(column, QTableWidgetItem(name))
         self.catalogo.tRepuestosL.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        
         header_style = """
         QHeaderView::section {
             font-family: "FiraCode Nerd Font";
@@ -58,6 +60,8 @@ class Catalogos(QMainWindow):
         for column, name in enumerate(columns):
             self.catalogo.tRepuestosL.setHorizontalHeaderItem(column, QTableWidgetItem(name))
         self.catalogo.tRepuestosL.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.catalogo.tRepuestosL.horizontalHeader().setSectionsMovable(True)
+        self.catalogo.tRepuestosL.horizontalHeader().setStretchLastSection(True)
         header_style = """
         QHeaderView::section {
             font-family: "FiraCode Nerd Font";
@@ -82,16 +86,21 @@ class Catalogos(QMainWindow):
     def searchRepuestos(self):
         try:
             self.showTableRepuestos()
+            self.catalogo.tRepuestosL.setRowCount(0)
             query = Query()
             self.codigo = self.catalogo.txtCodeName.text()
             cod = str(self.codigo)
             result = query.selectRepuestos(cod.upper())
-            row_index = self.catalogo.tRepuestosL.rowCount()
-            self.catalogo.tRepuestosL.insertRow(row_index)
-            self.catalogo.tRepuesreturnExittosL.setItem(row_index, 0, QTableWidgetItem(str(result[0][0])))
-            self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(result[0][1])))
+            for row in result:
+                row_index = self.catalogo.tRepuestosL.rowCount()
+                self.catalogo.tRepuestosL.insertRow(row_index)
+                self.catalogo.tRepuestosL.setItem(row_index, 0, QTableWidgetItem(str(row[0])))
+                self.catalogo.tRepuestosL.setItem(row_index, 1, QTableWidgetItem(str(row[1])))
+                self.catalogo.tRepuestosL.setItem(row_index, 2, QTableWidgetItem(str(row[2])))
         except Exception as e:
-            print('codigo no encontrado o no valido: ', e)
+            self.advertencia = QMessageBox()
+            self.advertencia.warning(None, "Error", "error: codigo incorrecto o valor invalido "+str(e))
+            print(e)
         
         
     def searchRepuestoMoto(self):
@@ -137,3 +146,6 @@ class Catalogos(QMainWindow):
         from .home import Home
         self.home = Home()
         self.catalogo.close()
+    
+    def registroClick(self):
+        print('se clickeo')

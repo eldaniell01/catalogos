@@ -38,15 +38,17 @@ class Query:
         values = (codigo, descripcion, imagen, categoria, motos)
         self.db.execute_query(query, values)
         
-    def selectRepuestos(self, codigo):
+    def selectRepuestos(self, codigo=None):
         query = """
-                    SELECT codigo, GROUP_CONCAT(m.nombre SEPARATOR ", ") as descrip FROM repuestos r  
+                    SELECT r.codigo, r.descripcion, GROUP_CONCAT(CONCAT(m.nombre, ' ', m.modelo) SEPARATOR ", ") as descrip FROM repuestos r  
                     INNER JOIN motos m on r.motos_idmotos = m.idmotos
-                    WHERE codigo = %s
+                    WHERE codigo = %s OR LOWER(r.descripcion) LIKE LOWER(CONCAT('%', %s, '%'))
                     GROUP BY codigo
                 """
-        values = (codigo,)
+        values = (codigo, codigo)       
+        
         result = self.db.execute_query(query, values)
+        print(result)
         self.db.close_connection()
         return result
     
